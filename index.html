@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Jet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #game {
+            margin-top: 50px;
+        }
+        #jet {
+            font-size: 50px;
+            position: relative;
+            top: 0;
+        }
+        #multiplier {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="jet">✈️</div>
+        <div id="multiplier">Множитель: 1.00x</div>
+        <button id="cashout">Забрать выигрыш</button>
+    </div>
+
+    <script>
+        let multiplier = 1.0;
+        let interval;
+        let crashed = false;
+
+        // Запуск игры
+        function startGame() {
+            interval = setInterval(() => {
+                if (!crashed) {
+                    multiplier += 0.01;
+                    document.getElementById("multiplier").innerText = `Множитель: ${multiplier.toFixed(2)}x`;
+                    document.getElementById("jet").style.top = `${multiplier * 10}px`;
+                }
+            }, 100);
+
+            // Случайное время "падения"
+            setTimeout(() => {
+                crashed = true;
+                clearInterval(interval);
+                alert(`Игра окончена! Вы могли забрать выигрыш на ${multiplier.toFixed(2)}x`);
+            }, Math.random() * 10000 + 5000); // Падение через 5-15 секунд
+        }
+
+        // Забрать выигрыш
+        document.getElementById("cashout").addEventListener("click", () => {
+            if (!crashed) {
+                clearInterval(interval);
+                alert(`Вы забрали выигрыш на ${multiplier.toFixed(2)}x!`);
+                crashed = true;
+            }
+        });
+
+        // Запуск игры при загрузке страницы
+        startGame();
+    </script>
+</body>
+</html>
